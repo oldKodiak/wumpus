@@ -46,53 +46,15 @@ namespace Wumpus
                 int k = 0;
                 int k1 = 0;
                 int j9 = 0;
+
+                istr = PromptForInstructions(istr);
+
+
                 while (_currentLine <= 1150 && EarlyExit != _currentLine)
                 {
                     _nextLine = _currentLine + 1;
                     switch (_currentLine)
                     {
-                        case 5:
-                            break; // 5 rem *** HUNT THE WUMPUS ***
-                        case 10:
-                            break; // 10 dim p(5)
-                        case 15:
-                            _io.Prompt("INSTRUCTIONS (Y-N) ");
-                            break; // 15 print "INSTRUCTIONS (Y-N)";
-                        case 20:
-                            istr = _io.ReadChar();
-                            break; // 20 input i$
-                        case 25:
-                            if (istr == 'N' || istr == 'n') _nextLine = 35;
-                            break; // 25 if (i$ = "N") or (i$ = "n") then 35
-                        case 30:
-                            gosub(375, 35);
-                            break; // 30 gosub 375
-                        case 35:
-                            _nextLine = 80;
-                            break; // 35 goto 80
-                        case 80:
-                            break; // 80 rem *** SET UP CAVE (DODECAHEDRAL NODE LIST) ***
-                        // 85 dim s(20,3)
-                        // 90 for j = 1 to 20
-                        // 95 for k = 1 to 3
-                        // 100 read s(j,k)
-                        // 105 next k
-                        // 110 next j
-                        // 115 data 2,5,8,1,3,10,2,4,12,3,5,14,1,4,6
-                        // 120 data 5,7,15,6,8,17,1,7,9,8,10,18,2,9,11
-                        // 125 data 10,12,19,3,11,13,12,14,20,4,13,15,6,14,16
-                        // 130 data 15,17,20,7,16,18,9,17,19,11,18,20,13,16,19
-                        // 135 def fnA(X)=INT(20*RND(1))+1
-                        // 140 def fnB(X)=INT(3*RND(1))+1
-                        // 145 def fnC(X)=INT(4*RND(1))+1
-                        case 150:
-                            break; // 150 rem *** LOCATE L ARRAY ITEMS ***
-                        case 155:
-                            break; // 155 rem *** 1-YOU, 2-WUMPUS, 3&4-PITS, 5&6-BATS ***
-                        case 160:
-                            break; // 160 dim l(6)
-                        case 165:
-                            break; // 165 dim m(6)
                         case 170:
                             j = 1;
                             break; // 170 for j = 1 to 6
@@ -106,8 +68,6 @@ namespace Wumpus
                             ++j;
                             if (j <= 6) _nextLine = 175;
                             break; // 185 next j
-                        case 190:
-                            break; // 190 rem *** CHECK FOR CROSSOVERS (IE l(1)=l(2), ETC) ***
                         case 195:
                             j = 1;
                             break; // 195 for j = 1 to 6
@@ -128,21 +88,15 @@ namespace Wumpus
                             ++j;
                             if (j <= 6) _nextLine = 200;
                             break; // 220 next j
-                        case 225:
-                            break; // 225 rem *** SET NO. OF ARROWS ***
                         case 230:
                             aa = 5;
                             break; // 230 a = 5
                         case 235:
                             playerPosition = _entityPositions[1];
                             break; // 235 l = l(1)
-                        case 240:
-                            break; // 240 rem *** RUN THE GAME ***
                         case 245:
                             _io.WriteLine("HUNT THE WUMPUS");
                             break; // 245 print "HUNT THE WUMPUS"
-                        case 250:
-                            break; // 250 rem *** HAZARD WARNING AND LOCATION ***
                         case 255:
                             gosub(585, 260);
                             break; // 255 gosub 585
@@ -219,65 +173,9 @@ namespace Wumpus
                         case 370:
                             _nextLine = 230;
                             break; // 370 goto 230
-                        case 375:
-                            _io.GiveInstructions();
-                            returnFromGosub();
-                            break; // 580 return
                         case 585:
-                            break; // 585 rem *** PRINT LOCATION & HAZARD WARNINGS ***
-                        case 590:
-                            _io.WriteLine("");
-                            break; // 590 print
-                        case 595:
-                            j = 2;
-                            break; // 595 for j = 2 to 6
-                        case 600:
-                            k = 1;
-                            break; // 600 for k = 1 to 3
-                        case 605:
-                            if (map[_entityPositions[1], k] != _entityPositions[j]) _nextLine = 640;
-                            break; // 605 if s(l(1),k) <> l(j) then 640
-                        case 610:
-                            switch (j - 1)
-                            {
-                                // 610 on j-1 goto 615,625,625,635,635
-                                case 1:
-                                    _nextLine = 615;
-                                    break;
-                                case 2:
-                                case 3:
-                                    _nextLine = 625;
-                                    break;
-                                case 4:
-                                case 5:
-                                    _nextLine = 635;
-                                    break;
-                            }
-                            ;
-                            break;
-                        case 615:
-                            _io.WriteLine("I SMELL A WUMPUS!");
-                            break; // 615 print "I SMELL A WUMPUS!"
-                        case 620:
-                            _nextLine = 640;
-                            break; // 620 goto 640
-                        case 625:
-                            _io.WriteLine("I FEEL A DRAFT");
-                            break; // 625 print "I FEEL A DRAFT"
-                        case 630:
-                            _nextLine = 640;
-                            break; // 630 goto 640
-                        case 635:
-                            _io.WriteLine("BATS NEARBY!");
-                            break; // 635 print "BATS NEARBY!"
-                        case 640:
-                            ++k;
-                            if (k <= 3) _nextLine = 605;
-                            break; // 640 next k
-                        case 645:
-                            ++j;
-                            if (j <= 6) _nextLine = 600;
-                            break; // 645 next j
+                            PrintHazards(map);
+                            break; 
                         case 650:
                             _io.Prompt("YOUR ARE IN ROOM ");
                             _io.WriteLine(_entityPositions[1].ToString());
@@ -557,6 +455,44 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private void PrintHazards(int[,] map)
+        {
+            _io.WriteLine("");
+            for (int j = 2; j <= 6; j++)
+            {
+                for (int k = 1; k <= 3; k++)
+                {
+                    if (map[_entityPositions[1], k] != _entityPositions[j])
+                        continue;
+
+                    switch (j)
+                    {
+                        case 2:
+                            _io.WriteLine("I SMELL A WUMPUS!");
+                            break;
+                        case 3:
+                        case 4:
+                            _io.WriteLine("I FEEL A DRAFT");
+                            break;
+                        case 5:
+                        case 6:
+                            _io.WriteLine("BATS NEARBY!");
+                            break;
+                    }
+                }
+            }
+        }
+
+        private char PromptForInstructions(char istr)
+        {
+            _io.Prompt("INSTRUCTIONS (Y-N) ");
+
+            istr = _io.ReadChar();
+            if (!(istr == 'N' || istr == 'n'))
+                _io.GiveInstructions();
+            return istr;
         }
 
         private static int Lose()
