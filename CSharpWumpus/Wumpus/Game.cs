@@ -10,6 +10,7 @@ namespace Wumpus
         private int _nextLine;
         public Random random = new Random();
         private IO _io;
+        private int[] _entityPositions;
 
         public Game(IO io)
         {
@@ -33,13 +34,13 @@ namespace Wumpus
                     {0, 10, 12, 19}, {0, 3, 11, 13}, {0, 12, 14, 20}, {0, 4, 13, 15}, {0, 6, 14, 16},
                     {0, 15, 17, 20}, {0, 7, 16, 18}, {0, 9, 17, 19}, {0, 11, 18, 20}, {0, 13, 16, 19}
                 };
-                int[] l = new int[7];
+                _entityPositions = new int[7];
                 int[] m = new int[7];
                 int[] p = new int[6];
                 int aa = 5;
-                int ll = aa;
+                int playerPosition = aa;
                 int o = 1;
-                int f = 0;
+                int fucked = 0;
 
                 int j = 0;
                 int k = 0;
@@ -96,10 +97,10 @@ namespace Wumpus
                             j = 1;
                             break; // 170 for j = 1 to 6
                         case 175:
-                            l[j] = SelectRandomRoom();
+                            _entityPositions[j] = SelectRandomRoom();
                             break; // 175 l(j) = fna(0)
                         case 180:
-                            m[j] = l[j];
+                            m[j] = _entityPositions[j];
                             break; // 180 m(j) = l(j)
                         case 185:
                             ++j;
@@ -117,7 +118,7 @@ namespace Wumpus
                             if (j == k) _nextLine = 215;
                             break; // 205 if j = k then 215
                         case 210:
-                            if (l[j] == l[k]) _nextLine = 170;
+                            if (_entityPositions[j] == _entityPositions[k]) _nextLine = 170;
                             break; // 210 if l(j) = l(k) then 170
                         case 215:
                             ++k;
@@ -133,7 +134,7 @@ namespace Wumpus
                             aa = 5;
                             break; // 230 a = 5
                         case 235:
-                            ll = l[1];
+                            playerPosition = _entityPositions[1];
                             break; // 235 l = l(1)
                         case 240:
                             break; // 240 rem *** RUN THE GAME ***
@@ -167,7 +168,7 @@ namespace Wumpus
                             gosub(715, 285);
                             break; // 280 gosub 715
                         case 285:
-                            if (f == 0) _nextLine = 255;
+                            if (fucked == 0) _nextLine = 255;
                             break; // 285 if f = 0 then 255
                         case 290:
                             _nextLine = 310;
@@ -178,10 +179,10 @@ namespace Wumpus
                             gosub(975, 305);
                             break; // 300 gosub 975
                         case 305:
-                            if (f == 0) _nextLine = 255;
+                            if (fucked == 0) _nextLine = 255;
                             break; // 305 if f = 0 then 255
                         case 310:
-                            if (f > 0) _nextLine = 335;
+                            if (fucked > 0) _nextLine = 335;
                             break; // 310 if f > 0 then 335
                         case 315:
                             break; // 315 rem *** LOSE ***
@@ -200,7 +201,7 @@ namespace Wumpus
                             j = 1;
                             break; // 340 for j = 1 to 6
                         case 345:
-                            l[j] = m[j];
+                            _entityPositions[j] = m[j];
                             break; // 345 l(j) = m(j)
                         case 350:
                             ++j;
@@ -234,7 +235,7 @@ namespace Wumpus
                             k = 1;
                             break; // 600 for k = 1 to 3
                         case 605:
-                            if (map[l[1], k] != l[j]) _nextLine = 640;
+                            if (map[_entityPositions[1], k] != _entityPositions[j]) _nextLine = 640;
                             break; // 605 if s(l(1),k) <> l(j) then 640
                         case 610:
                             switch (j - 1)
@@ -279,15 +280,15 @@ namespace Wumpus
                             break; // 645 next j
                         case 650:
                             _io.Prompt("YOUR ARE IN ROOM ");
-                            _io.WriteLine(l[1].ToString());
+                            _io.WriteLine(_entityPositions[1].ToString());
                             break; // 650 print "YOU ARE IN ROOM ";l(1)
                         case 655:
                             _io.Prompt("TUNNELS LEAD TO ");
-                            _io.Prompt(map[ll, 1].ToString()); // 655 print "TUNNELS LEAD TO ";s(l,1);" ";s(l,2);" ";s(l,3)
+                            _io.Prompt(map[playerPosition, 1].ToString()); // 655 print "TUNNELS LEAD TO ";s(l,1);" ";s(l,2);" ";s(l,3)
                             _io.Prompt(" ");
-                            _io.Prompt(map[ll, 2].ToString());
+                            _io.Prompt(map[playerPosition, 2].ToString());
                             _io.Prompt(" ");
-                            _io.WriteLine(map[ll, 3].ToString());
+                            _io.WriteLine(map[playerPosition, 3].ToString());
                             break;
                         case 660:
                             _io.WriteLine("");
@@ -324,7 +325,7 @@ namespace Wumpus
                         case 715:
                             break; // 715 rem *** ARROW ROUTINE ***
                         case 720:
-                            f = 0;
+                            fucked = 0;
                             break; // 720 f = 0
                         case 725:
                             break; // 725 rem *** PATH OF ARROW ***
@@ -368,7 +369,7 @@ namespace Wumpus
                         case 795:
                             break; // 795 rem *** SHOOT ARROW ***
                         case 800:
-                            ll = l[1];
+                            playerPosition = _entityPositions[1];
                             break; // 800 l = l(1)
                         case 805:
                             k = 1;
@@ -377,7 +378,7 @@ namespace Wumpus
                             k1 = 1;
                             break; // 810 for k1 = 1 to 3
                         case 815:
-                            if (map[ll, k1] == p[k]) _nextLine = 895;
+                            if (map[playerPosition, k1] == p[k]) _nextLine = 895;
                             break; // 815 if s(l,k1) = p(k) then 895
                         case 820:
                             ++k1;
@@ -386,7 +387,7 @@ namespace Wumpus
                         case 825:
                             break; // 825 rem *** NO TUNNEL FOR ARROW ***
                         case 830:
-                            ll = map[ll, ChooseRandomTunnel()];
+                            playerPosition = map[playerPosition, ChooseRandomTunnel()];
                             break; // 830 l = s(l,fnb(1))
                         case 835:
                             _nextLine = 900;
@@ -399,12 +400,12 @@ namespace Wumpus
                             _io.WriteLine("MISSED");
                             break; // 845 print "MISSED"
                         case 850:
-                            ll = l[1];
+                            playerPosition = _entityPositions[1];
                             break; // 850 l = l(1)
                         case 855:
                             break; // 855 rem *** MOVE WUMPUS ***
                         case 860:
-                            k = WumpusDoAction(k, l, map, ll, ref f);
+                            WumpusDoAction(map, playerPosition, ref fucked);
                             break; // 860 gosub 935
                         case 865:
                             break; // 865 rem *** AMMO CHECK ***
@@ -415,7 +416,7 @@ namespace Wumpus
                             if (aa > 0) _nextLine = 885;
                             break; // 875 if a > 0 then 885
                         case 880:
-                            f = -1;
+                            fucked = -1;
                             break; // 880 f = -1
                         case 885:
                             returnFromGosub();
@@ -423,22 +424,22 @@ namespace Wumpus
                         case 890:
                             break; // 890 rem *** SEE IF ARROW IS AT l(1) OR AT l(2)
                         case 895:
-                            ll = p[k];
+                            playerPosition = p[k];
                             break; // 895 l = p(k)
                         case 900:
-                            if (ll != l[2]) _nextLine = 920;
+                            if (playerPosition != WumpusPosition) _nextLine = 920;
                             break; // 900 if l <> l(2) then 920
                         case 905:
                             _io.WriteLine("AHA! YOU GOT THE WUMPUS!");
                             break; // 905 print "AHA! YOU GOT THE WUMPUS!"
                         case 910:
-                            f = 1;
+                            fucked = 1;
                             break; // 910 f = 1
                         case 915:
                             returnFromGosub();
                             break; // 915 return
                         case 920:
-                            if (ll != l[1]) _nextLine = 840;
+                            if (playerPosition != _entityPositions[1]) _nextLine = 840;
                             break; // 920 if l <> l(1) then 840
                         case 925:
                             _io.WriteLine("OUCH! ARROW GOT YOU!");
@@ -446,28 +447,22 @@ namespace Wumpus
                         case 930:
                             _nextLine = 880;
                             break; // 930 goto 880
-                        case 935:
-                            break; // 935 rem *** MOVE WUMPUS ROUTINE ***
-                        case 940:
-                            k = WumpusDoAction(k, l, map, ll, ref f);
-                            returnFromGosub();
-                            break; 
                         case 975:
                             break; // 975 rem *** MOVE ROUTINE ***
                         case 980:
-                            f = 0;
+                            fucked = 0;
                             break; // 980 f = 0
                         case 985:
                             _io.Prompt("WHERE TO ");
                             break; // 985 print "WHERE TO";
                         case 990:
-                            ll = _io.readInt();
+                            playerPosition = _io.readInt();
                             break; // 990 input l
                         case 995:
-                            if (ll < 1) _nextLine = 985;
+                            if (playerPosition < 1) _nextLine = 985;
                             break; // 995 if l < 1 then 985
                         case 1000:
-                            if (ll > 20) _nextLine = 985;
+                            if (playerPosition > 20) _nextLine = 985;
                             break; // 1000 if l > 20 then 985
                         case 1005:
                             k = 1;
@@ -475,14 +470,14 @@ namespace Wumpus
                         case 1010:
                             break; // 1010 rem *** CHECK IF LEGAL MOVE ***
                         case 1015:
-                            if (map[l[1], k] == ll) _nextLine = 1045;
+                            if (map[_entityPositions[1], k] == playerPosition) _nextLine = 1045;
                             break; // 1015 if s(l(1),k) = l then 1045
                         case 1020:
                             ++k;
                             if (k <= 3) _nextLine = 1010;
                             break; // 1020 next k
                         case 1025:
-                            if (ll == l[1]) _nextLine = 1045;
+                            if (playerPosition == _entityPositions[1]) _nextLine = 1045;
                             break; // 1025 if l = l(1) then 1045
                         case 1030:
                             _io.Prompt("NOT POSSIBLE - ");
@@ -493,12 +488,12 @@ namespace Wumpus
                         case 1040:
                             break; // 1040 rem *** CHECK FOR HAZARDS ***
                         case 1045:
-                            l[1] = ll;
+                            _entityPositions[1] = playerPosition;
                             break; // 1045 l(1) = l
                         case 1050:
                             break; // 1050 rem *** WUMPUS ***
                         case 1055:
-                            if (ll != l[2]) _nextLine = 1090;
+                            if (playerPosition != WumpusPosition) _nextLine = 1090;
                             break; // 1055 if l <> l(2) then 1090
                         case 1060:
                             _io.WriteLine("... OOPS! BUMPED A WUMPUS!");
@@ -506,10 +501,10 @@ namespace Wumpus
                         case 1065:
                             break; // 1065 rem *** MOVE WUMPUS ***
                         case 1070:
-                            gosub(940, 1075);
+                            WumpusDoAction(map, playerPosition, ref fucked);
                             break; // 1070 gosub 940
                         case 1075:
-                            if (f == 0) _nextLine = 1090;
+                            if (fucked == 0) _nextLine = 1090;
                             break; // 1075 if f = 0 then 1090
                         case 1080:
                             returnFromGosub();
@@ -517,16 +512,16 @@ namespace Wumpus
                         case 1085:
                             break; // 1085 rem *** PIT ***
                         case 1090:
-                            if (ll == l[3]) _nextLine = 1100;
+                            if (playerPosition == _entityPositions[3]) _nextLine = 1100;
                             break; // 1090 if l = l(3) then 1100
                         case 1095:
-                            if (ll != l[4]) _nextLine = 1120;
+                            if (playerPosition != _entityPositions[4]) _nextLine = 1120;
                             break; // 1095 if l <> l(4) then 1120
                         case 1100:
                             _io.WriteLine("YYYYIIIIEEEE . . . FELL IN PIT");
                             break; // 1100 print "YYYYIIIIEEEE . . . FELL IN PIT"
                         case 1105:
-                            f = -1;
+                            fucked = Lose();
                             break; // 1105 f = -1
                         case 1110:
                             returnFromGosub();
@@ -534,16 +529,16 @@ namespace Wumpus
                         case 1115:
                             break; // 1115 rem *** BATS ***
                         case 1120:
-                            if (ll == l[5]) _nextLine = 1130;
+                            if (playerPosition == _entityPositions[5]) _nextLine = 1130;
                             break; // 1120 if l = l(5) then 1130
                         case 1125:
-                            if (ll != l[6]) _nextLine = 1145;
+                            if (playerPosition != _entityPositions[6]) _nextLine = 1145;
                             break; // 1125 if l <> l(6) then 1145
                         case 1130:
                             _io.WriteLine("ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!");
                             break; // 1130 print "ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!"
                         case 1135:
-                            ll = SelectRandomRoom();
+                            playerPosition = SelectRandomRoom();
                             break; // 1135 l = fna(1)
                         case 1140:
                             _nextLine = 1045;
@@ -564,19 +559,32 @@ namespace Wumpus
             }
         }
 
-        private int WumpusDoAction(int k, int[] l, int[,] map, int ll, ref int f)
+        private static int Lose()
         {
-            k = ChooseWumpusAction();
-            if (k != 4)
-            {
-                l[2] = map[l[2], k];
-            }
-            if (l[2] == ll)
+            return -1;
+        }
+
+        private void WumpusDoAction(int[,] map, int playerPosition, ref int fucked)
+        {
+            int action = ChooseWumpusAction();
+            if (WumpusMoved(action))
+                WumpusPosition = map[WumpusPosition, action];
+            if (WumpusPosition == playerPosition)
             {
                 _io.WriteLine("TSK TSK TSK - WUMPUS GOT YOU!");
-                f = -1;
+                fucked = Lose();
             }
-            return k;
+        }
+
+        private int WumpusPosition
+        {
+            get { return _entityPositions[2]; }
+            set { _entityPositions[2] = value; }
+        }
+
+        private static bool WumpusMoved(int action)
+        {
+            return action != 4;
         }
 
         private void gosub(int gosubLine, int lineToReturnTo) {
