@@ -98,7 +98,7 @@ namespace Wumpus
                             _io.WriteLine("HUNT THE WUMPUS");
                             break; // 245 print "HUNT THE WUMPUS"
                         case 255:
-                            gosub(585, 260);
+                            PrintTurn(map, playerPosition);
                             break; // 255 gosub 585
                         case 260:
                             break; // 260 rem *** MOVE OR SHOOT ***
@@ -173,53 +173,29 @@ namespace Wumpus
                         case 370:
                             _nextLine = 230;
                             break; // 370 goto 230
-                        case 585:
-                            PrintHazards(map);
-                            break; 
-                        case 650:
-                            _io.Prompt("YOUR ARE IN ROOM ");
-                            _io.WriteLine(_entityPositions[1].ToString());
-                            break; // 650 print "YOU ARE IN ROOM ";l(1)
-                        case 655:
-                            _io.Prompt("TUNNELS LEAD TO ");
-                            _io.Prompt(map[playerPosition, 1].ToString()); // 655 print "TUNNELS LEAD TO ";s(l,1);" ";s(l,2);" ";s(l,3)
-                            _io.Prompt(" ");
-                            _io.Prompt(map[playerPosition, 2].ToString());
-                            _io.Prompt(" ");
-                            _io.WriteLine(map[playerPosition, 3].ToString());
-                            break;
-                        case 660:
-                            _io.WriteLine("");
-                            break; // 660 print
-                        case 665:
-                            returnFromGosub();
-                            break; // 665 return
-                        case 670:
-                            break; // 670 rem *** CHOOSE OPTION ***
                         case 675:
-                            _io.Prompt("SHOOT OR MOVE (S-M) ");
-                            break; // 675 print "SHOOT OR MOVE (S-M)";
-                        case 680:
-                            istr = _io.ReadChar();
-                            break; // 680 input i$
-                        case 685:
-                            if (istr != 'S' && istr != 's') _nextLine = 700;
-                            break; // 685 if (i$ <> "S") and (i$ <> "s") then 700
-                        case 690:
-                            o = 1;
-                            break; // 690 o = 1
-                        case 695:
-                            returnFromGosub();
-                            break; // 695 return
-                        case 700:
-                            if (istr != 'M' && istr != 'm') _nextLine = 675;
-                            break; // 700 if (i$ <> "M") and (i$ <> "m") then 675
-                        case 705:
-                            o = 2;
-                            break; // 705 o = 2
-                        case 710:
+
+                            //var istr = '';
+
+                            while (istr != 'S' && istr != 's' && istr != 'M' && istr != 'm')
+                            {
+                                _io.Prompt("SHOOT OR MOVE (S-M) ");
+                                istr = _io.ReadChar();
+                            }
+                            
+                            if (istr == 'S' && istr == 's')
+                            {
+                                o = 1;
+                            }
+                                else
+                            {
+                                o = 2;
+                                
+                            }
                             returnFromGosub();
                             break; // 710 return
+
+
                         case 715:
                             break; // 715 rem *** ARROW ROUTINE ***
                         case 720:
@@ -455,6 +431,30 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private void PrintTurn(int[,] map, int playerPosition)
+        {
+            PrintHazards(map);
+            PrintPlayerPosition();
+            PrintTunnels(map, playerPosition);
+        }
+
+        private void PrintTunnels(int[,] map, int playerPosition)
+        {
+            _io.Prompt("TUNNELS LEAD TO ");
+            _io.Prompt(map[playerPosition, 1].ToString()); // 655 print "TUNNELS LEAD TO ";s(l,1);" ";s(l,2);" ";s(l,3)
+            _io.Prompt(" ");
+            _io.Prompt(map[playerPosition, 2].ToString());
+            _io.Prompt(" ");
+            _io.WriteLine(map[playerPosition, 3].ToString());
+            _io.WriteLine("");
+        }
+
+        private void PrintPlayerPosition()
+        {
+            _io.Prompt("YOUR ARE IN ROOM ");
+            _io.WriteLine(_entityPositions[1].ToString());
         }
 
         private void PrintHazards(int[,] map)
