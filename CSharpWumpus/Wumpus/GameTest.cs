@@ -65,48 +65,48 @@ namespace Wumpus
         }
 
         [TestCase]
-        public void fnA()
+        public void SelectRandomRoomTest()
         {
-            Assert.AreEqual(15, testObj.fnA());
-            Assert.AreEqual(17, testObj.fnA());
-            Assert.AreEqual(16, testObj.fnA());
-            Assert.AreEqual(12, testObj.fnA());
-            Assert.AreEqual(5, testObj.fnA());
-            Assert.AreEqual(12, testObj.fnA());
-            Assert.AreEqual(19, testObj.fnA());
-            Assert.AreEqual(9, testObj.fnA());
-            Assert.AreEqual(20, testObj.fnA());
-            Assert.AreEqual(6, testObj.fnA());
+            Assert.AreEqual(15, testObj.SelectRandomRoom());
+            Assert.AreEqual(17, testObj.SelectRandomRoom());
+            Assert.AreEqual(16, testObj.SelectRandomRoom());
+            Assert.AreEqual(12, testObj.SelectRandomRoom());
+            Assert.AreEqual(5, testObj.SelectRandomRoom());
+            Assert.AreEqual(12, testObj.SelectRandomRoom());
+            Assert.AreEqual(19, testObj.SelectRandomRoom());
+            Assert.AreEqual(9, testObj.SelectRandomRoom());
+            Assert.AreEqual(20, testObj.SelectRandomRoom());
+            Assert.AreEqual(6, testObj.SelectRandomRoom());
         }
 
         [TestCase]
-        public void fnB()
+        public void ChooseRandomTunnelTest()
         {
-            Assert.AreEqual(3, testObj.fnB());
-            Assert.AreEqual(3, testObj.fnB());
-            Assert.AreEqual(3, testObj.fnB());
-            Assert.AreEqual(2, testObj.fnB());
-            Assert.AreEqual(1, testObj.fnB());
-            Assert.AreEqual(2, testObj.fnB());
-            Assert.AreEqual(3, testObj.fnB());
-            Assert.AreEqual(2, testObj.fnB());
-            Assert.AreEqual(3, testObj.fnB());
-            Assert.AreEqual(1, testObj.fnB());
+            Assert.AreEqual(3, testObj.ChooseRandomTunnel());
+            Assert.AreEqual(3, testObj.ChooseRandomTunnel());
+            Assert.AreEqual(3, testObj.ChooseRandomTunnel());
+            Assert.AreEqual(2, testObj.ChooseRandomTunnel());
+            Assert.AreEqual(1, testObj.ChooseRandomTunnel());
+            Assert.AreEqual(2, testObj.ChooseRandomTunnel());
+            Assert.AreEqual(3, testObj.ChooseRandomTunnel());
+            Assert.AreEqual(2, testObj.ChooseRandomTunnel());
+            Assert.AreEqual(3, testObj.ChooseRandomTunnel());
+            Assert.AreEqual(1, testObj.ChooseRandomTunnel());
         }
 
         [TestCase]
-        public void fnC()
+        public void ChooseWumpusActionTest()
         {
-            Assert.AreEqual(3, testObj.fnC());
-            Assert.AreEqual(4, testObj.fnC());
-            Assert.AreEqual(4, testObj.fnC());
-            Assert.AreEqual(3, testObj.fnC());
-            Assert.AreEqual(1, testObj.fnC());
-            Assert.AreEqual(3, testObj.fnC());
-            Assert.AreEqual(4, testObj.fnC());
-            Assert.AreEqual(2, testObj.fnC());
-            Assert.AreEqual(4, testObj.fnC());
-            Assert.AreEqual(2, testObj.fnC());
+            Assert.AreEqual(3, testObj.ChooseWumpusAction());
+            Assert.AreEqual(4, testObj.ChooseWumpusAction());
+            Assert.AreEqual(4, testObj.ChooseWumpusAction());
+            Assert.AreEqual(3, testObj.ChooseWumpusAction());
+            Assert.AreEqual(1, testObj.ChooseWumpusAction());
+            Assert.AreEqual(3, testObj.ChooseWumpusAction());
+            Assert.AreEqual(4, testObj.ChooseWumpusAction());
+            Assert.AreEqual(2, testObj.ChooseWumpusAction());
+            Assert.AreEqual(4, testObj.ChooseWumpusAction());
+            Assert.AreEqual(2, testObj.ChooseWumpusAction());
         }
 
         [TestCase]
