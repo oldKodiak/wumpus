@@ -35,11 +35,11 @@ namespace Wumpus
                     {0, 15, 17, 20}, {0, 7, 16, 18}, {0, 9, 17, 19}, {0, 11, 18, 20}, {0, 13, 16, 19}
                 };
                 _entityPositions = new int[7];
-                int[] m = new int[7];
+                int[] previousEntityPositions = new int[7];
                 int[] p = new int[6];
                 int remainingArrows = 5;
                 int playerPosition = remainingArrows;
-                int o = 1;
+                int playerAction = 1;
                 int fucked = 0;
 
                 int j = 0;
@@ -56,68 +56,46 @@ namespace Wumpus
                     switch (_currentLine)
                     {
                         case 170:
-                            InitializeGameState(m, ref remainingArrows, ref playerPosition);
+                            InitializeGameState(previousEntityPositions, ref remainingArrows, ref playerPosition);
                             PrintTitle();
                             break; // 245 print "HUNT THE WUMPUS"
                         case 255:
                             PrintTurn(map, playerPosition);
-                            break; // 255 gosub 585
-                        case 260:
-                            break; // 260 rem *** MOVE OR SHOOT ***
-                        case 265:
+                        // 260 rem *** MOVE OR SHOOT ***
                             gosub(670, 270);
                             break; // 265 gosub 670
                         case 270:
-                            switch (o)
+                            switch (playerAction)
                             {
-                                case 1:
-                                    _nextLine = 280;
+                                case 1: // SHOOT
+                                    gosub(715, 285);
                                     break;
-                                case 2:
-                                    _nextLine = 300;
+                                case 2: // MOVE
+                                    gosub(975, 305);
                                     break;
                             }
-                            break; // 270 on o goto 280,300
-                        case 275:
-                            break; // 275 rem *** SHOOT ***
-                        case 280:
-                            gosub(715, 285);
+                       
                             break; // 280 gosub 715
                         case 285:
-                            if (fucked == 0) _nextLine = 255;
-                            break; // 285 if f = 0 then 255
-                        case 290:
-                            _nextLine = 310;
+                            _nextLine = fucked == 0 ? 255 : 310;
                             break; // 290 goto 310
-                        case 295:
-                            break; // 295 rem *** MOVE ***
-                        case 300:
-                            gosub(975, 305);
-                            break; // 300 gosub 975
                         case 305:
                             if (fucked == 0) _nextLine = 255;
                             break; // 305 if f = 0 then 255
                         case 310:
                             if (fucked > 0) _nextLine = 335;
                             break; // 310 if f > 0 then 335
-                        case 315:
-                            break; // 315 rem *** LOSE ***
                         case 320:
-                            _io.WriteLine("HA HA HA - YOU LOSE!");
-                            break; // 320 print "HA HA HA - YOU LOSE!"
-                        case 325:
+                            PrintLoseMessage();
                             _nextLine = 340;
-                            break; // 325 goto 340
-                        case 330:
                             break; // 330 rem *** WIN ***
                         case 335:
-                            _io.WriteLine("HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!");
-                            break; // 335 print "HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!"
-                        case 340:
+                            PrintWinMessage();
+                        
                             j = 1;
                             break; // 340 for j = 1 to 6
                         case 345:
-                            _entityPositions[j] = m[j];
+                            _entityPositions[j] = previousEntityPositions[j];
                             break; // 345 l(j) = m(j)
                         case 350:
                             ++j;
@@ -145,7 +123,7 @@ namespace Wumpus
                             if (istr != 'S' && istr != 's') _nextLine = 700;
                             break; // 685 if (i$ <> "S") and (i$ <> "s") then 700
                         case 690:
-                                o = 1;
+                                playerAction = 1;
                             break; // 690 o = 1
                         case 695:
                             returnFromGosub();
@@ -154,7 +132,7 @@ namespace Wumpus
                             if (istr != 'M' && istr != 'm') _nextLine = 675;
                             break; // 700 if (i$ <> "M") and (i$ <> "m") then 675
                         case 705:
-                                o = 2;
+                                playerAction = 2;
                             break; // 705 o = 2
                         case 710:
                             returnFromGosub();
@@ -371,6 +349,16 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private void PrintWinMessage()
+        {
+            _io.WriteLine("HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!");
+        }
+
+        private void PrintLoseMessage()
+        {
+            _io.WriteLine("HA HA HA - YOU LOSE!");
         }
 
         private int InitializeGameState(int[] m,  ref int remainingArrows, ref int playerPosition)
