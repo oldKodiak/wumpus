@@ -45,7 +45,7 @@ namespace Wumpus
                 int j = 0;
                 int k = 0;
                 int k1 = 0;
-                int j9 = 0;
+                int arrowRoomCount = 0;
 
                 istr = PromptForInstructions(istr);
 
@@ -197,49 +197,26 @@ namespace Wumpus
                         case 710:
                             returnFromGosub();
                             break; // 710 return
-                        case 715:
-                            break; // 715 rem *** ARROW ROUTINE ***
+                        // 715 rem *** ARROW ROUTINE ***
                         case 720:
                             fucked = 0;
-                            break; // 720 f = 0
-                        case 725:
-                            break; // 725 rem *** PATH OF ARROW ***
-                        case 735:
                             _io.Prompt("NO. OF ROOMS (1-5) ");
-                            break; // 735 print "NO. OF ROOMS (1-5)";
-                        case 740:
-                            j9 = _io.readInt();
-                            break; // 740 input j9
-                        case 745:
-                            if (j9 < 1) _nextLine = 735;
-                            break; // 745 if j9 < 1 then 735
-                        case 750:
-                            if (j9 > 5) _nextLine = 735;
-                            break; // 750 if j9 > 5 then 735
-                        case 755:
-                            k = 1;
-                            break; // 755 for k = 1 to j9
-                        case 760:
-                            _io.Prompt("ROOM # ");
-                            break; // 760 print "ROOM #";
-                        case 765:
-                            p[k] = _io.readInt();
-                            break; // 765 input p(k)
-                        case 770:
-                            if (k <= 2) _nextLine = 790;
-                            break; // 770 if k <= 2 then 790
-                        case 775:
-                            if (p[k] != p[k - 2]) _nextLine = 790;
-                            break; // 775 if p(k) <> p(k-2) then 790
-                        case 780:
-                            _io.WriteLine("ARROWS AREN'T THAT CROOKED - TRY ANOTHER ROOM");
-                            break; // 780 print "ARROWS AREN'T THAT CROOKED - TRY ANOTHER ROOM"
-                        case 785:
-                            _nextLine = 760;
-                            break; // 785 goto 760
-                        case 790:
-                            ++k;
-                            if (k <= j9) _nextLine = 760;
+                            arrowRoomCount = _io.readInt();
+                            if (arrowRoomCount < 1 || arrowRoomCount > 5) 
+                                _nextLine = 720;
+
+                            for (k = 1; k <= arrowRoomCount; k++)
+                            {
+                                _io.Prompt("ROOM # ");
+                                p[k] = _io.readInt();
+                                if (k <= 2)
+                                    continue;
+                                if (p[k] != p[k - 2])
+                                    continue;
+
+                                _io.WriteLine("ARROWS AREN'T THAT CROOKED - TRY ANOTHER ROOM");
+                                k--;
+                            }
                             break; // 790 next k
                         case 795:
                             break; // 795 rem *** SHOOT ARROW ***
@@ -269,7 +246,7 @@ namespace Wumpus
                             break; // 835 goto 900
                         case 840:
                             ++k;
-                            if (k <= j9) _nextLine = 810;
+                            if (k <= arrowRoomCount) _nextLine = 810;
                             break; // 840 next k
                         case 845:
                             _io.WriteLine("MISSED");
