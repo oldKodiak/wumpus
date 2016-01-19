@@ -56,18 +56,12 @@ namespace Wumpus
                     switch (_currentLine)
                     {
                         case 170:
-                            j = 1;
-                            break; // 170 for j = 1 to 6
-                        case 175:
-                            _entityPositions[j] = SelectRandomRoom();
-                            break; // 175 l(j) = fna(0)
-                        case 180:
-                            m[j] = _entityPositions[j];
-                            break; // 180 m(j) = l(j)
-                        case 185:
-                            ++j;
-                            if (j <= 6) _nextLine = 175;
-                            break; // 185 next j
+                            for (int entityIndex = 1; entityIndex <= 6; entityIndex++)
+                            {
+                                _entityPositions[entityIndex] = SelectRandomRoom();
+                                m[entityIndex] = _entityPositions[entityIndex];
+                            }
+                            break;
                         case 195:
                             j = 1;
                             break; // 195 for j = 1 to 6
