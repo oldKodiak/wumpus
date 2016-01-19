@@ -37,8 +37,8 @@ namespace Wumpus
                 _entityPositions = new int[7];
                 int[] m = new int[7];
                 int[] p = new int[6];
-                int aa = 5;
-                int playerPosition = aa;
+                int remainingArrows = 5;
+                int playerPosition = remainingArrows;
                 int o = 1;
                 int fucked = 0;
 
@@ -56,40 +56,8 @@ namespace Wumpus
                     switch (_currentLine)
                     {
                         case 170:
-                            for (int entityIndex = 1; entityIndex <= 6; entityIndex++)
-                            {
-                                _entityPositions[entityIndex] = SelectRandomRoom();
-                                m[entityIndex] = _entityPositions[entityIndex];
-                            }
-                            break;
-                        case 195:
-                            j = 1;
-                            break; // 195 for j = 1 to 6
-                        case 200:
-                            k = 1;
-                            break; // 200 for k = 1 to 6
-                        case 205:
-                            if (j == k) _nextLine = 215;
-                            break; // 205 if j = k then 215
-                        case 210:
-                            if (_entityPositions[j] == _entityPositions[k]) _nextLine = 170;
-                            break; // 210 if l(j) = l(k) then 170
-                        case 215:
-                            ++k;
-                            if (k <= 6) _nextLine = 205;
-                            break; // 215 next k
-                        case 220:
-                            ++j;
-                            if (j <= 6) _nextLine = 200;
-                            break; // 220 next j
-                        case 230:
-                            aa = 5;
-                            break; // 230 a = 5
-                        case 235:
-                            playerPosition = _entityPositions[1];
-                            break; // 235 l = l(1)
-                        case 245:
-                            _io.WriteLine("HUNT THE WUMPUS");
+                            InitializeGameState(m, ref remainingArrows, ref playerPosition);
+                            PrintTitle();
                             break; // 245 print "HUNT THE WUMPUS"
                         case 255:
                             PrintTurn(map, playerPosition);
@@ -256,10 +224,10 @@ namespace Wumpus
                         case 865:
                             break; // 865 rem *** AMMO CHECK ***
                         case 870:
-                            aa = aa - 1;
+                            remainingArrows = remainingArrows - 1;
                             break; // 870 a = a-1
                         case 875:
-                            if (aa > 0) _nextLine = 885;
+                            if (remainingArrows > 0) _nextLine = 885;
                             break; // 875 if a > 0 then 885
                         case 880:
                             fucked = -1;
@@ -403,6 +371,44 @@ namespace Wumpus
                 // TODO Auto-generated catch block
                 _io.WriteLine(e.StackTrace);
             }
+        }
+
+        private int InitializeGameState(int[] m,  ref int remainingArrows, ref int playerPosition)
+        {
+            bool needToTryAgain;
+
+            do
+            {
+                needToTryAgain = false;
+                for (int entityIndex = 1; entityIndex <= 6; entityIndex++)
+                {
+                    _entityPositions[entityIndex] = SelectRandomRoom();
+                    m[entityIndex] = _entityPositions[entityIndex];
+                }
+
+
+                for (int entityIndexA = 1; entityIndexA <= 6; entityIndexA += 1)
+                {
+                    for (int entityIndexB = 1; entityIndexB <= 6; entityIndexB += 1)
+                    {
+                        if (entityIndexB == entityIndexA)
+                            continue;
+                        if (_entityPositions[entityIndexA] == _entityPositions[entityIndexB])
+                        {
+                            needToTryAgain = true;
+                        }
+                    }
+                }
+            } while (needToTryAgain);
+
+            remainingArrows = 5;
+            playerPosition = _entityPositions[1];
+            return remainingArrows;
+        }
+
+        private void PrintTitle()
+        {
+            _io.WriteLine("HUNT THE WUMPUS");
         }
 
         private void PrintTurn(int[,] map, int playerPosition)
