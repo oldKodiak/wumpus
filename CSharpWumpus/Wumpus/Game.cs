@@ -174,28 +174,29 @@ namespace Wumpus
                             _nextLine = 230;
                             break; // 370 goto 230
                         case 675:
-
-                            //var istr = '';
-
-                            while (istr != 'S' && istr != 's' && istr != 'M' && istr != 'm')
-                            {
                                 _io.Prompt("SHOOT OR MOVE (S-M) ");
+                            break; // 675 print "SHOOT OR MOVE (S-M)";
+                        case 680:
                                 istr = _io.ReadChar();
-                            }
-                            
-                            if (istr == 'S' && istr == 's')
-                            {
+                            break; // 680 input i$
+                        case 685:
+                            if (istr != 'S' && istr != 's') _nextLine = 700;
+                            break; // 685 if (i$ <> "S") and (i$ <> "s") then 700
+                        case 690:
                                 o = 1;
-                            }
-                                else
-                            {
+                            break; // 690 o = 1
+                        case 695:
+                            returnFromGosub();
+                            break; // 695 return
+                        case 700:
+                            if (istr != 'M' && istr != 'm') _nextLine = 675;
+                            break; // 700 if (i$ <> "M") and (i$ <> "m") then 675
+                        case 705:
                                 o = 2;
-                                
-                            }
+                            break; // 705 o = 2
+                        case 710:
                             returnFromGosub();
                             break; // 710 return
-
-
                         case 715:
                             break; // 715 rem *** ARROW ROUTINE ***
                         case 720:
